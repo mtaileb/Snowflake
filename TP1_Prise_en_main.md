@@ -221,23 +221,182 @@ Voici un **exemple de résultat** :
 
 ---
 
-**Vocabulaire clé :**
-*   **Stage data files** → Mettre en *stage* (stocker) les fichiers de données
-*   **Snowflake stage** → Stage Snowflake
-*   **Location in cloud storage** → Emplacement dans le stockage cloud
-*   **Load and unload data** → Charger et décharger des données
-*   **Internal stages** → Stages internes
-*   **Store data files internally within Snowflake** → Stocker des fichiers de données en interne dans Snowflake
-*   **External stages** → Stages externes
-*   **Store data files externally** → Stocker des fichiers de données en externe
-*   **Upload the sample data files** → Télécharger/Téléverser les fichiers de données d'exemple
-*   **Internal stage for the emp_basic table** → Stage interne pour la table emp_basic
-*   **PUT command** → Commande `PUT`
-*   **Upload local data files** → Téléverser des fichiers de données locaux
-*   **Table stage** → Stage de table
-*   **Full directory path** → Chemin de répertoire complet
-*   **File system wildcards** → Caractères génériques du système de fichiers
-*   **Staged files** → Fichiers mis en *stage*
-*   **Compresses files by default** → Compresse les fichiers par défaut
-*   **LIST command** → Commande `LIST`
-*   **List the staged files** → Lister les fichiers mis en *stage*
+### **Copier les données dans les tables cibles**
+
+Pour **charger vos données mises en *stage* dans la table cible**, exécutez **`COPY INTO <table>`**.
+
+La commande **`COPY INTO <table>`** utilise l'**entrepôt virtuel** que vous avez créé dans *Créer des objets Snowflake* pour copier les fichiers.
+
+```sql
+COPY INTO emp_basic
+  FROM @%emp_basic
+  FILE_FORMAT = (type = csv field_optionally_enclosed_by='"')
+  PATTERN = '.*employees0[1-5].csv.gz'
+  ON_ERROR = 'skip_file';
+```
+
+Où :
+
+*   La clause **`FROM`** spécifie l'**emplacement contenant les fichiers de données** (le *stage* interne pour la table).
+*   La clause **`FILE_FORMAT`** spécifie le **type de fichier comme CSV**, et indique que le **caractère double-guillemet (`"`)** est utilisé pour **encadrer les chaînes de caractères**. Snowflake prend en charge **divers types de fichiers et options**. Ceux-ci sont décrits dans **`CREATE FILE FORMAT`**.
+*   La clause **`PATTERN`** spécifie que la commande doit **charger les données depuis les noms de fichiers correspondant** à cette **expression régulière** (`.*employees0[1-5].csv.gz`).
+*   La clause **`ON_ERROR`** spécifie **l'action à effectuer** lorsque la commande `COPY` rencontre des erreurs dans les fichiers. **Par défaut**, la commande **arrête le chargement** des données dès la première erreur rencontrée. Cet exemple **ignore tout fichier contenant une erreur** et passe au chargement du fichier suivant. (Aucun des fichiers de ce tutoriel ne contient d'erreur ; cela est inclus à titre d'illustration.)
+
+La commande `COPY` propose également une **option pour valider les fichiers avant leur chargement**. Pour plus d'informations sur les **vérifications d'erreur supplémentaires** et les instructions de validation, consultez la rubrique **`COPY INTO <table>`** et les autres tutoriels sur le chargement de données.
+
+La commande `COPY` renvoie un **résultat** montrant la **liste des fichiers copiés** et les informations associées :
+
+```
++--------------------+--------+-------------+-------------+-------------+-------------+-------------+------------------+-----------------------+-------------------------+
+| file               | status | rows_parsed | rows_loaded | error_limit | errors_seen | first_error | first_error_line | first_error_character | first_error_column_name |
+|--------------------+--------+-------------+-------------+-------------+-------------+-------------+------------------+-----------------------+-------------------------|
+| employees02.csv.gz | LOADED |           5 |           5 |           1 |           0 | NULL        |             NULL |                  NULL | NULL                    |
+| employees04.csv.gz | LOADED |           5 |           5 |           1 |           0 | NULL        |             NULL |                  NULL | NULL                    |
+| employees05.csv.gz | LOADED |           5 |           5 |           1 |           0 | NULL        |             NULL |                  NULL | NULL                    |
+| employees03.csv.gz | LOADED |           5 |           5 |           1 |           0 | NULL        |             NULL |                  NULL | NULL                    |
+| employees01.csv.gz | LOADED |           5 |           5 |           1 |           0 | NULL        |             NULL |                  NULL | NULL                    |
++--------------------+--------+-------------+-------------+-------------+-------------+-------------+------------------+-----------------------+-------------------------+
+```
+
+---
+
+### **Interroger les données chargées**
+
+Vous pouvez **interroger les données chargées** dans la table `emp_basic` en utilisant le **SQL standard** et **toutes les fonctions et opérateurs pris en charge**.
+
+Vous pouvez également **manipuler les données**, comme mettre à jour les données chargées ou insérer plus de données, en utilisant des **commandes DML standard**.
+
+---
+
+#### **Récupérer toutes les données**
+Retourne **toutes les lignes et colonnes** de la table :
+
+```sql
+SELECT * FROM emp_basic;
+```
+
+Voici un **résultat partiel** :
+
+```
++------------+--------------+---------------------------+-----------------------------+--------------------+------------+
+| FIRST_NAME | LAST_NAME    | EMAIL                     | STREETADDRESS               | CITY               | START_DATE |
+|------------+--------------+---------------------------+-----------------------------+--------------------+------------|
+| Arlene     | Davidovits   | adavidovitsk@sf_tuts.com  | 7571 New Castle Circle      | Meniko             | 2017-05-03 |
+| Violette   | Shermore     | vshermorel@sf_tuts.com    | 899 Merchant Center         | Troitsk            | 2017-01-19 |
+| Ron        | Mattys       | rmattysm@sf_tuts.com      | 423 Lien Pass               | Bayaguana          | 2017-11-15 |
+ ...
+ ...
+ ...
+| Carson     | Bedder       | cbedderh@sf_tuts.co.au    | 71 Clyde Gallagher Place    | Leninskoye         | 2017-03-29 |
+| Dana       | Avory        | davoryi@sf_tuts.com       | 2 Holy Cross Pass           | Wenlin             | 2017-05-11 |
+| Ronny      | Talmadge     | rtalmadgej@sf_tuts.co.uk  | 588 Chinook Street          | Yawata             | 2017-06-02 |
++------------+--------------+---------------------------+-----------------------------+--------------------+------------+
+```
+
+---
+
+#### **Insérer des lignes de données supplémentaires**
+En plus de charger des données à partir de fichiers mis en *stage* dans une table, vous pouvez **insérer des lignes directement** dans une table en utilisant la **commande DML `INSERT`**.
+
+Par exemple, pour insérer **deux lignes supplémentaires** dans la table :
+
+```sql
+INSERT INTO emp_basic VALUES
+   ('Clementine','Adamou','cadamou@sf_tuts.com','10510 Sachs Road','Klenak','2017-9-22'),
+   ('Marlowe','De Anesy','madamouc@sf_tuts.co.uk','36768 Northfield Plaza','Fangshan','2017-1-26');
+```
+
+---
+
+#### **Interroger les lignes en fonction de l'adresse e-mail**
+Retourne une **liste d'adresses e-mail** avec des **domaines de premier niveau du Royaume-Uni** en utilisant la fonction **`[ NOT ] LIKE`** :
+
+```sql
+SELECT email FROM emp_basic WHERE email LIKE '%.uk';
+```
+
+Voici un **exemple de résultat** :
+
+```
++--------------------------+
+| EMAIL                    |
+|--------------------------|
+| gbassfordo@sf_tuts.co.uk |
+| rtalmadgej@sf_tuts.co.uk |
+| madamouc@sf_tuts.co.uk   |
++--------------------------+
+```
+
+---
+
+#### **Interroger les lignes en fonction de la date d'embauche**
+Par exemple, pour **calculer quand certains avantages sociaux des employés pourraient commencer**, ajoutez **90 jours** aux dates d'embauche des employés en utilisant la fonction **`DATEADD`**. Filtrez la liste par les employés dont la date d'embauche est **antérieure au 1ᵉʳ janvier 2017** :
+
+```sql
+SELECT first_name, last_name, DATEADD('day', 90, start_date)
+FROM emp_basic
+WHERE start_date <= '2017-01-01';
+```
+
+Voici un **exemple de résultat** :
+
+```
++------------+-----------+------------------------------+
+| FIRST_NAME | LAST_NAME | DATEADD('DAY',90,START_DATE) |
+|------------+-----------+------------------------------|
+| Granger    | Bassford  | 2017-03-30                   |
+| Catherin   | Devereu   | 2017-03-17                   |
+| Cesar      | Hovie     | 2017-03-21                   |
+| Wallis     | Sizey     | 2017-03-30                   |
++------------+-----------+------------------------------+
+```
+
+---
+
+### **Récapitulatif, nettoyage et ressources supplémentaires**
+
+**Félicitations !** Vous avez **terminé avec succès ce tutoriel d'introduction**.
+
+Prenez quelques minutes pour revoir un **bref résumé** et les **points clés** abordés dans ce tutoriel. Vous pouvez également envisager de **nettoyer** en supprimant les objets que vous avez créés. Pour en savoir plus, consultez d'autres rubriques de la **Documentation Snowflake**.
+
+---
+
+#### **Résumé et points clés**
+En résumé, le **chargement de données** s'effectue en **deux étapes** :
+
+1.  **Mettre en *stage* les fichiers de données** à charger. Les fichiers peuvent être mis en *stage* en **interne** (dans Snowflake) ou dans un **emplacement externe**. Dans ce tutoriel, vous avez mis les fichiers en *stage* en interne.
+2.  **Copier les données** des fichiers mis en *stage* vers une **table cible existante**. Un **entrepôt en cours d'exécution** est requis pour cette étape.
+
+**Rappelez-vous ces points clés** concernant le chargement de fichiers **CSV** :
+
+*   Un fichier CSV est constitué d'**un ou plusieurs enregistrements**, contenant **un ou plusieurs champs** chacun, et comporte parfois une **ligne d'en-tête**.
+*   Les **enregistrements** et les **champs** dans chaque fichier sont séparés par des **délimiteurs**. Les délimiteurs **par défaut** sont :
+    *   **Pour les enregistrements** : caractères de **nouvelle ligne**.
+    *   **Pour les champs** : **virgules**.
+*   En d'autres termes, Snowflake s'attend à ce que **chaque enregistrement** dans un fichier CSV soit **séparé par un saut de ligne** et que les **champs** (c'est-à-dire les valeurs individuelles) dans chaque enregistrement soient **séparés par des virgules**. Si d'autres caractères sont utilisés comme délimiteurs, vous devez le **spécifier explicitement** dans le format de fichier lors du chargement.
+*   Il existe une **corrélation directe** entre les **champs dans les fichiers** et les **colonnes dans la table** que vous allez charger, en termes de :
+    *   **Nombre** de champs (dans le fichier) et de colonnes (dans la table cible).
+    *   **Position** des champs et des colonnes dans leur fichier/table respectif.
+    *   **Types de données** (chaîne, nombre, date, etc.) des champs et colonnes.
+*   **Les enregistrements ne seront PAS chargés** si les nombres, positions et types de données **ne correspondent pas**.
+*   **Note :** Snowflake prend en charge le chargement de fichiers où les champs ne correspondent pas exactement aux colonnes de la table cible ; cependant, il s'agit d'un sujet de chargement de données plus avancé (traité dans *Transforming data during a load*).
+
+---
+
+#### **Nettoyage du tutoriel (Optionnel)**
+Si les objets que vous avez créés dans ce tutoriel ne sont **plus nécessaires**, vous pouvez les **supprimer** du système avec des instructions **`DROP <object>`**.
+
+```sql
+DROP DATABASE IF EXISTS sf_tuts;
+
+DROP WAREHOUSE IF EXISTS sf_tuts_wh;
+```
+
+---
+
+#### **Quitter la connexion**
+Pour **quitter une connexion**, utilisez la commande **`!exit`** pour SnowSQL (ou son alias **`!disconnect`**).
+
+`!exit` ferme la **connexion courante** et ** SnowSQL** s'il s'agit de la dernière connexion.
+
+---
