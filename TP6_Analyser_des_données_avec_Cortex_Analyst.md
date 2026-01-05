@@ -13,13 +13,13 @@ Les conditions suivantes sont nécessaires pour réaliser ce tutoriel :
 ### **Étape 1 : Configuration**
 
 #### **1. Obtention des données d'exemple**
-Vous utiliserez un jeu de données d'exemple téléchargé depuis GitHub. Téléchargez les **fichiers suivants** sur votre système :
+Vous utiliserez un jeu de données d'exemple téléchargé depuis GitHub https://github.com/Snowflake-Labs/sfguide-getting-started-with-cortex-analyst/tree/main/data. Téléchargez les **fichiers suivants** sur votre système :
 
 *   `daily_revenue.csv`
 *   `product.csv`
 *   `region.csv`
 
-Téléchargez également le **modèle sémantique YAML** depuis GitHub.
+Téléchargez également le **modèle sémantique YAML** depuis GitHub https://github.com/Snowflake-Labs/sfguide-getting-started-with-cortex-analyst/blob/main/revenue_timeseries.yaml
 
 Il est conseillé d'examiner ce **modèle sémantique** avant de continuer. Il complète le schéma SQL de chaque table avec des **informations supplémentaires** qui aident Cortex Analyst à comprendre les questions sur les données. Pour plus d'informations, consultez la *Spécification du modèle sémantique Cortex Analyst*.
 
