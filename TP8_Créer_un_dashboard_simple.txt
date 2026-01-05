@@ -1,4 +1,4 @@
-Dashboards
+Projects -> Dashboards
 New Dashboard -> New tile -> SQL worksheet
 Sélectionner la base de données SNOWFLAKE_SAMPLE_DATA
 Exécuter: SELECT * FROM SNOWFLAKE_SAMPLE_DATA.TPCH_SF1.ORDERS;
