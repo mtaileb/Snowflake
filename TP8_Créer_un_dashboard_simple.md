@@ -66,6 +66,7 @@ GROUP BY o_orderstatus;
     Vous pouvez maintenant ajouter de nouvelles tiles au dashboard
 
 Voici une explication détaillée de toutes les colonnes de la table SNOWFLAKE_SAMPLE_DATA.TPCH_SF1.ORDERS :
+
 📋 Vue d'ensemble de la table
 
 La table ORDERS contient les commandes clients dans le schéma TPC-H (benchmark de base de données transactionnelle).
