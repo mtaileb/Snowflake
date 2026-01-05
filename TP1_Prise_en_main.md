@@ -29,7 +29,7 @@ Pour créer la base de données, la table et l'entrepôt virtuel, vous devez êt
 ---
 
 #### **2. Installer SnowSQL**
-Pour installer SnowSQL, consultez le guide **[Installing SnowSQL](https://docs.snowflake.com/en/user-guide/snowsql-install-config)** (Installation de SnowSQL).
+Pour installer SnowSQL, consultez le guide **[Installing SnowSQL](https://www.snowflake.com/en/developers/downloads/snowsql/)** (Installation de SnowSQL).
 
 ---
 
