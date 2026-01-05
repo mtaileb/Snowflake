@@ -7,6 +7,5 @@ Une fois les résultats affichés, analysez-les, puis cliquez sur 'Chart'
 Ensuite modifiez le type de graphique pour trouver le plus adéquat
 Une fois un graphique adéquat trouvé, cliquez sur 'Return to <dashboard>' en haut à gauche
 Vous pouvez ajouter des nouvelles tiles au dashboard
-A faire:
-1) Créez un nouveau tile en refaisant le même exercice pour LINEITEM et l_linestatus
-2) Partagez le dashboard avec vos camarades
+A faire: créez un nouveau tile en refaisant le même exercice pour LINEITEM et l_linestatus
+
