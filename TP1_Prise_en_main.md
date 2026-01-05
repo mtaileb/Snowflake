@@ -36,7 +36,7 @@ Récupérer les éléments de login dans votre espace Snowsight:
 
 <img width="588" height="200" alt="image" src="https://github.com/user-attachments/assets/82253fff-d9a0-4a94-8fe8-e6e294c1bf96" />
 
-Et recopiez-les dans la ligne de commande:
+Et recopiez-les dans la ligne de commande, que vous allez lancer à partir du répertoire où a été installé l'exécutable SnowSQL (par exemple C:/Programmes/snowsql):
 
 <img width="823" height="50" alt="image" src="https://github.com/user-attachments/assets/f44f1e68-c860-429a-883c-382f32ed2dd2" />
 
