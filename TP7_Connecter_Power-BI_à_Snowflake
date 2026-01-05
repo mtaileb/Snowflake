@@ -1,0 +1,3 @@
+- Ouvrir Power BI
+- Cliquer sur 'Get data' -> 'Data base' -> 'Snowflake'-> 'Connect'
+- Ensuite se loguer à Snowflake via la boite de dialogue
