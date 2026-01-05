@@ -31,6 +31,15 @@ Pour créer la base de données, la table et l'entrepôt virtuel, vous devez êt
 #### **2. Installer SnowSQL**
 Pour installer SnowSQL, consultez le guide **[Installing SnowSQL](https://www.snowflake.com/en/developers/downloads/snowsql/)** (Installation de SnowSQL).
 
+Pour se loguer, suivre se modèle:
+Récupérer les éléments de login dans votre espace Snowsight:
+
+<img width="588" height="200" alt="image" src="https://github.com/user-attachments/assets/82253fff-d9a0-4a94-8fe8-e6e294c1bf96" />
+
+Et recopiez-les dans la ligne de commande:
+
+<img width="823" height="50" alt="image" src="https://github.com/user-attachments/assets/f44f1e68-c860-429a-883c-382f32ed2dd2" />
+
 ---
 
 #### **3. Télécharger les fichiers de données d'exemple**
