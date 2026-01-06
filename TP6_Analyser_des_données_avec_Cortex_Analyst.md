@@ -452,3 +452,77 @@ DROP WAREHOUSE IF EXISTS cortex_analyst_wh;
 *   Tous les autres objets éventuellement créés dans cette base de données
 
 **Conseil :** Effectuez cette étape uniquement si vous n'avez plus besoin des données et objets créés pendant le tutoriel.
+
+Voici des exemples de requêtes en langage naturel pour Cortex Analyst, basées sur les jeux de données :
+
+## **Analyses de base sur les revenus**
+1. "Quel est le revenu total sur l'ensemble de la période ?"
+2. "Affiche les revenus par mois sous forme de tableau et de graphique"
+3. "Quelle est la moyenne des revenus quotidiens ?"
+4. "Montre l'évolution du revenu au fil du temps"
+5. "Quels sont les 10 jours avec les revenus les plus élevés ?"
+
+## **Analyses par région**
+6. "Quelle région a généré le plus de revenus ?"
+7. "Compare les revenus entre l'Amérique du Nord et l'Europe"
+8. "Affiche la répartition des revenus par région géographique"
+9. "Quels états/provinces ont les meilleures performances ?"
+10. "Montre les revenus par continent (Amérique du Nord, Europe, Asie, etc.)"
+
+## **Analyses par catégorie de produit**
+11. "Quelle ligne de produit a le revenu le plus élevé ?"
+12. "Compare les revenus des Électroniques vs Vêtements"
+13. "Quelle est la part de marché de chaque catégorie de produit ?"
+14. "Affiche l'évolution des ventes par catégorie de produit"
+15. "Quel produit performe le mieux dans chaque région ?"
+
+## **Analyses temporelles détaillées**
+16. "Quelle est la tendance saisonnière des revenus ?"
+17. "Compare les revenus entre 2022 et 2023"
+18. "Quels mois ont les meilleures performances ?"
+19. "Y a-t-il une différence entre les revenus en semaine vs week-end ?"
+20. "Montre la croissance mensuelle des revenus"
+
+## **Analyses de profitabilité et coûts**
+21. "Quelle est la marge brute moyenne ? (REVENUE - COGS)"
+22. "Quelle catégorie de produit a la meilleure marge ?"
+23. "Compare les marges par région"
+24. "Quels sont les jours où la marge était négative ?"
+25. "Quelle est la relation entre les coûts et les revenus ?"
+
+## **Analyses de prévisions**
+26. "Compare les revenus réels avec les revenus prévus (FORECASTED_REVENUE)"
+27. "Quelle est la précision des prévisions par région ?"
+28. "Quelle catégorie de produit a les prévisions les plus précises ?"
+29. "Montre les écarts entre prévisions et réalité au fil du temps"
+30. "Quels sont les jours où nous avons dépassé les prévisions ?"
+
+## **Analyses croisées**
+31. "Quelle combinaison région/produit génère le plus de revenus ?"
+32. "Affiche une matrice produit-région avec les revenus totaux"
+33. "Quelle région est la plus rentable pour chaque catégorie de produit ?"
+34. "Compare les performances des différents états dans la région Amérique du Nord"
+35. "Quelle est la répartition des revenus par produit dans chaque région ?"
+
+## **Analyses comparatives et insights**
+36. "Quelle est la croissance des revenus sur les 6 derniers mois ?"
+37. "Compare les performances des différents continents"
+38. "Quel est le produit le plus vendu dans chaque région ?"
+39. "Y a-t-il des corrélations entre les régions dans les ventes ?"
+40. "Quelle région a la plus forte croissance trimestrielle ?"
+
+## **Requêtes spécifiques pour visualisation**
+41. "Crée un graphique à barres des revenus par région"
+42. "Affiche une carte thermique des ventes par produit et région"
+43. "Génère une série temporelle des revenus avec une moyenne mobile sur 7 jours"
+44. "Montre un camembert de la répartition des revenus par produit"
+45. "Crée un dashboard avec les KPI principaux"
+
+## **Requêtes analytiques avancées**
+46. "Identifie les tendances saisonnières par catégorie de produit"
+47. "Calcule le revenu moyen par jour de la semaine"
+48. "Quelle est la contribution de chaque région au revenu total ?"
+49. "Analyse la saisonnalité des ventes pour les Électroniques"
+50. "Prédit le revenu pour le mois prochain basé sur les tendances historiques"
+
+Ces requêtes couvrent divers aspects analytiques et peuvent être soumises directement à Cortex Analyst, qui devrait générer les requêtes SQL appropriées et retourner les résultats avec visualisations.
