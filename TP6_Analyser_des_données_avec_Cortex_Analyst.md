@@ -8,7 +8,7 @@
 Les conditions suivantes sont nécessaires pour réaliser ce tutoriel :
 
 *   Vous disposez d'un **compte Snowflake** et d'un **utilisateur** ayant un **rôle** accordant les **privilèges nécessaires** pour créer une base de données, un schéma, des tables, un *stage* et des objets d'entrepôt virtuel.
-*   Vous avez **Streamlit installé et configuré** sur votre système local.
+*   Vous avez **Streamlit installé et configuré** sur votre système local: https://docs.streamlit.io/get-started/installation/command-line
 
 ### **Étape 1 : Configuration**
 
