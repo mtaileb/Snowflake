@@ -45,6 +45,7 @@ Utilisez **Snowsight** (l'interface Snowflake) pour créer les objets nécessair
 3.  **Collez le code SQL ci-dessous** dans la feuille, puis sélectionnez **Exécuter tout** dans le menu déroulant en haut à droite.
 
 **⚠️ Important :** Remplacez **`<votre_utilisateur>`** par votre nom d'utilisateur Snowflake réel.
+**⚠️ Important :** Assurez-vous d'avoir sélectionné l'utilisateur ACCOUNTADMIN en haut à droite avant d'exécuter le script SQL.**
 
 ```sql
 /*--
