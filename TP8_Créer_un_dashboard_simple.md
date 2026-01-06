@@ -65,6 +65,37 @@ GROUP BY o_orderstatus;
 
     Vous pouvez maintenant ajouter de nouvelles tiles au dashboard
 
+Exemple:
+Liste des dix clients qui font le plus de commandes:
+SELECT 
+    o_custkey, 
+    COUNT(1) as nombre_commandes_par_client 
+FROM 
+    SNOWFLAKE_SAMPLE_DATA.TPCH_SF1.ORDERS 
+GROUP BY 
+    o_custkey 
+ORDER BY 
+    nombre_commandes_par_client DESC 
+LIMIT 10;
+
+Liste des dix clients qui génèrent le plus de chiffre d'affaires:
+SELECT 
+    c.c_custkey,
+    c.c_name,
+    SUM(o.o_totalprice) as revenus_totaux
+FROM 
+    SNOWFLAKE_SAMPLE_DATA.TPCH_SF1.ORDERS o
+JOIN 
+    SNOWFLAKE_SAMPLE_DATA.TPCH_SF1.CUSTOMER c
+    ON o.o_custkey = c.c_custkey
+GROUP BY 
+    c.c_custkey,
+    c.c_name
+ORDER BY 
+    revenus_totaux DESC
+LIMIT 10;
+
+
 Voici une explication détaillée de toutes les colonnes de la table SNOWFLAKE_SAMPLE_DATA.TPCH_SF1.ORDERS :
 
 📋 Vue d'ensemble de la table
