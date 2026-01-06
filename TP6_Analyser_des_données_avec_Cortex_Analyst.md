@@ -426,6 +426,9 @@ if st.session_state.active_suggestion:
 
 <img width="3574" height="1692" alt="image" src="https://github.com/user-attachments/assets/ac1ef213-ea95-4e1a-b3e9-16c55c5b2af5" />
 
+Si jamais vous avez un message d'erreur vous disant que les LLM ne snt pas disponibles dans votre région, ou que l'inférence inter-régios n'est pas disponible, modifiez votre région avec la commande suivante (à exécuter sous ACCOUNTADMIN/CORTEX_ANALYST_WH/CORTEX_ANALYST_DEMO/REVENUE_TIME_SERIES):
+ALTER ACCOUNT SET CORTEX_ENABLED_CROSS_REGION = 'AWS_US';
+
   ### **Étape 4 : Nettoyage**
 
 #### **Nettoyage (optionnel)**
