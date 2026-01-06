@@ -423,7 +423,9 @@ if st.session_state.active_suggestion:
     *   Les **résultats sous forme de tableau**
     *   Des **visualisations graphiques** automatiques
     *   Des **suggestions de questions** connexes
-  
+
+<img width="3574" height="1692" alt="image" src="https://github.com/user-attachments/assets/ac1ef213-ea95-4e1a-b3e9-16c55c5b2af5" />
+
   ### **Étape 4 : Nettoyage**
 
 #### **Nettoyage (optionnel)**
