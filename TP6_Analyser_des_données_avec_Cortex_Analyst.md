@@ -38,6 +38,8 @@ Utilisez **Snowsight** (l'interface Snowflake) pour créer les objets nécessair
 2.  Dans le menu de navigation, sélectionnez **Projets » Feuilles de travail**, puis cliquez sur **+**. Une nouvelle **feuille de travail SQL** s'ouvre.
 3.  **Collez le code SQL ci-dessous** dans la feuille, puis sélectionnez **Exécuter tout** dans le menu déroulant en haut à droite.
 
+**⚠️ Important :** Remplacez **`<votre_utilisateur>`** par votre nom d'utilisateur Snowflake réel.
+
 ```sql
 /*--
 • Création de la base de données, du schéma, de l'entrepôt et du stage
@@ -111,8 +113,6 @@ CREATE OR REPLACE TABLE cortex_analyst_demo.revenue_timeseries.region_dim (
     state VARCHAR(16777216)
 );
 ```
-
-**⚠️ Important :** Remplacez **`<votre_utilisateur>`** par votre nom d'utilisateur Snowflake réel.
 
 ---
 
