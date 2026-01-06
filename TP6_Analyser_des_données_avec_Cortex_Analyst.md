@@ -9,6 +9,12 @@ Les conditions suivantes sont nécessaires pour réaliser ce tutoriel :
 
 *   Vous disposez d'un **compte Snowflake** et d'un **utilisateur** ayant un **rôle** accordant les **privilèges nécessaires** pour créer une base de données, un schéma, des tables, un *stage* et des objets d'entrepôt virtuel.
 *   Vous avez **Streamlit installé et configuré** sur votre système local: https://docs.streamlit.io/get-started/installation/command-line
+Ci-dessous les commandes pour installer Streamlit sur un système Ubuntu:
+$ sudo apt install python3.10-venv
+$ python3 -m venv .venv
+$ source .venv/bin/activate
+$ pip install -r requirements.txt (le fichier requirements se trouve ici: https://github.com/Snowflake-Labs/sfguide-getting-started-with-cortex-analyst/raw/refs/heads/main/requirements.txt)
+
 
 ### **Étape 1 : Configuration**
 
