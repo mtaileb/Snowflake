@@ -158,7 +158,7 @@ Vous allez également téléverser le fichier YAML du modèle sémantique pour u
 1.  Connectez-vous à **Snowsight**.
 2.  Dans le menu de navigation, sélectionnez **Ingestion » Ajouter des données**, puis **Charger des fichiers vers un stage**.
 3.  **Glissez-déposez les quatre fichiers** téléchargés dans la fenêtre Snowsight.
-4.  Choisissez la base de données **`cortex_analyst_demo`**, le schéma **'REVENUE_TIMESERIES'**, et le stage **`raw_data`**, puis cliquez sur le bouton **Téléverser**.
+4.  Choisissez la base de données **`cortex_analyst_demo`**, le schéma **'revenue_timeseries'**, et le stage **`raw_data`**, puis cliquez sur le bouton **Téléverser**.
 
 ---
 
