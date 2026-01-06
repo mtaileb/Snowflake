@@ -45,6 +45,7 @@ Utilisez **Snowsight** (l'interface Snowflake) pour créer les objets nécessair
 3.  **Collez le code SQL ci-dessous** dans la feuille, puis sélectionnez **Exécuter tout** dans le menu déroulant en haut à droite.
 
 **⚠️ Important :** Remplacez **`<votre_utilisateur>`** par votre nom d'utilisateur Snowflake réel.
+
 **⚠️ Important :** Assurez-vous d'avoir sélectionné l'utilisateur ACCOUNTADMIN en haut à droite avant d'exécuter le script SQL.**
 
 ```sql
@@ -157,7 +158,7 @@ Vous allez également téléverser le fichier YAML du modèle sémantique pour u
 1.  Connectez-vous à **Snowsight**.
 2.  Dans le menu de navigation, sélectionnez **Ingestion » Ajouter des données**, puis **Charger des fichiers vers un stage**.
 3.  **Glissez-déposez les quatre fichiers** téléchargés dans la fenêtre Snowsight.
-4.  Choisissez la base de données **`cortex_analyst_demo`** et le stage **`raw_data`**, puis cliquez sur le bouton **Téléverser**.
+4.  Choisissez la base de données **`cortex_analyst_demo`**, le schéma **'REVENUE_TIMESERIES'**, et le stage **`raw_data`**, puis cliquez sur le bouton **Téléverser**.
 
 ---
 
