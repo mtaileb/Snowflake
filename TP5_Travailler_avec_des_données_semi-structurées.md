@@ -422,21 +422,23 @@ Il existe plusieurs méthodes pour maintenir la cohérence des données. Cette s
 1.  **Insérer un autre nouvel enregistrement** dans `RAW_SOURCE` :
     ```sql
     INSERT INTO raw_source
-      SELECT
-      PARSE_JSON ('{
-        "device_type": "web_browser",
-        "events": [
-          {
-            "f": 79,
-            "rv": "122375.99,744.89,386.99,12.45,78.08,43.7,9.22,8765.43",
-            "t": 5769784730576,
-            "v": { ... },
-            "vd": 55,
-            "z": 8745598047355
-          }
-        ],
-        "version": 8.7
-      }');
+SELECT PARSE_JSON('{
+    "device_type": "cell_phone",
+    "events": [
+      {
+        "f": 79,
+        "rv": "786954.67,492.68,3577.48,40.11,343.00,345.8,0.22,8765.22",
+        "t": 5769784730576,
+        "v": {
+          "key1": "value1",
+          "key2": "value2"
+        },
+        "vd": 54,
+        "z": 1437644222811
+      }
+    ],
+    "version": 3.2
+  }');
     ```
 
 2.  **Insérer dans `EVENTS`** en comparant **toutes les colonnes correspondantes** :
