@@ -354,6 +354,10 @@ Il existe plusieurs méthodes pour maintenir la cohérence des données. Cette s
     ```sql
     ALTER TABLE events ADD CONSTRAINT pk_DeviceType PRIMARY KEY (device_type, rv);
     ```
+Pour voir la clé primaire:
+    ```sql
+    SHOW PRIMARY KEYS IN TABLE table_name;
+    ```
 
 3.  **Insérer un nouvel enregistrement JSON** dans `RAW_SOURCE` (simulation d'un nouvel événement) :
     ```sql
