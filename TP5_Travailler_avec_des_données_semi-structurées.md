@@ -366,7 +366,10 @@ Il existe plusieurs méthodes pour maintenir la cohérence des données. Cette s
             "f": 79,
             "rv": "786954.67,492.68,3577.48,40.11,343.00,345.8,0.22,8765.22",
             "t": 5769784730576,
-            "v": { ... },
+            "v": {
+              "key1": "value1",
+              "key2": "value2"
+            },
             "vd": 54,
             "z": 1437644222811
           }
