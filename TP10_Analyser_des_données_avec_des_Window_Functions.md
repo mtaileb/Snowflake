@@ -26,84 +26,109 @@ Pour voir comment cela fonctionne, commençons par créer et charger la table `m
 
 Pour créer et insérer des lignes dans la table `menu_items` utilisée dans certains exemples de fonctions, exécutez les commandes SQL suivantes. (Cette table contient 60 lignes. Elle est basée sur, mais pas identique à, la table `menu` de l'exemple de base de données Tasty Bytes.)
 
+Nota: avant d'exéctuer le code, sélectionnez le user ACCOUNTADMIN, et le warehouse COMPUTE_WH.
+
 ```sql
-CREATE OR REPLACE TABLE menu_items(
+-- 1. Créer une base de données dédiée (si elle n'existe pas)
+CREATE DATABASE IF NOT EXISTS FOODTRUCK_DB;
+
+-- 2. Utiliser la base de données
+USE DATABASE FOODTRUCK_DB;
+
+-- 3. Créer un schéma dédié
+CREATE SCHEMA IF NOT EXISTS MENU_DATA;
+
+-- 4. Utiliser le schéma
+USE SCHEMA MENU_DATA;
+
+-- 5. Créer la table menu_items
+CREATE OR REPLACE TABLE menu_items (
   menu_id INT NOT NULL,
   menu_category VARCHAR(20),
   menu_item_name VARCHAR(50),
   menu_cogs_usd NUMBER(7,2),
-  menu_price_usd NUMBER(7,2));
+  menu_price_usd NUMBER(7,2)
+);
 
-INSERT INTO menu_items VALUES(1,'Beverage','Bottled Soda',0.500,3.00);
-INSERT INTO menu_items VALUES(2,'Beverage','Bottled Water',0.500,2.00);
-INSERT INTO menu_items VALUES(3,'Main','Breakfast Crepe',5.00,12.00);
-INSERT INTO menu_items VALUES(4,'Main','Buffalo Mac & Cheese',6.00,10.00);
-INSERT INTO menu_items VALUES(5,'Main','Chicago Dog',4.00,9.00);
-INSERT INTO menu_items VALUES(6,'Main','Chicken Burrito',3.2500,12.500);
-INSERT INTO menu_items VALUES(7,'Main','Chicken Pot Pie Crepe',6.00,15.00);
-INSERT INTO menu_items VALUES(8,'Main','Combination Curry',9.00,15.00);
-INSERT INTO menu_items VALUES(9,'Main','Combo Fried Rice',5.00,11.00);
-INSERT INTO menu_items VALUES(10,'Main','Combo Lo Mein',6.00,13.00);
-INSERT INTO menu_items VALUES(11,'Main','Coney Dog',5.00,10.00);
-INSERT INTO menu_items VALUES(12,'Main','Creamy Chicken Ramen',8.00,17.2500);
-INSERT INTO menu_items VALUES(13,'Snack','Crepe Suzette',4.00,9.00);
-INSERT INTO menu_items VALUES(14,'Main','Fish Burrito',3.7500,12.500);
-INSERT INTO menu_items VALUES(15,'Snack','Fried Pickles',1.2500,6.00);
-INSERT INTO menu_items VALUES(16,'Snack','Greek Salad',4.00,11.00);
-INSERT INTO menu_items VALUES(17,'Main','Gyro Plate',8.00,12.00);
-INSERT INTO menu_items VALUES(18,'Main','Hot Ham & Cheese',7.00,11.00);
-INSERT INTO menu_items VALUES(19,'Dessert','Ice Cream Sandwich',1.00,4.00);
-INSERT INTO menu_items VALUES(20,'Beverage','Iced Tea',0.7500,3.00);
-INSERT INTO menu_items VALUES(21,'Main','Italian',6.00,11.00);
-INSERT INTO menu_items VALUES(22,'Main','Lean Beef Tibs',6.00,13.00);
-INSERT INTO menu_items VALUES(23,'Main','Lean Burrito Bowl',3.500,12.500);
-INSERT INTO menu_items VALUES(24,'Main','Lean Chicken Tibs',5.00,11.00);
-INSERT INTO menu_items VALUES(25,'Main','Lean Chicken Tikka Masala',10.00,17.00);
-INSERT INTO menu_items VALUES(26,'Beverage','Lemonade',0.6500,3.500);
-INSERT INTO menu_items VALUES(27,'Main','Lobster Mac & Cheese',10.00,15.00);
-INSERT INTO menu_items VALUES(28,'Dessert','Mango Sticky Rice',1.2500,5.00);
-INSERT INTO menu_items VALUES(29,'Main','Miss Piggie',2.600,6.00);
-INSERT INTO menu_items VALUES(30,'Main','Mothers Favorite',4.500,12.00);
-INSERT INTO menu_items VALUES(31,'Main','New York Dog',4.00,8.00);
-INSERT INTO menu_items VALUES(32,'Main','Pastrami',8.00,11.00);
-INSERT INTO menu_items VALUES(33,'Dessert','Popsicle',0.500,3.00);
-INSERT INTO menu_items VALUES(34,'Main','Pulled Pork Sandwich',7.00,12.00);
-INSERT INTO menu_items VALUES(35,'Main','Rack of Pork Ribs',11.2500,21.00);
-INSERT INTO menu_items VALUES(36,'Snack','Seitan Buffalo Wings',4.00,7.00);
-INSERT INTO menu_items VALUES(37,'Main','Spicy Miso Vegetable Ramen',7.00,17.2500);
-INSERT INTO menu_items VALUES(38,'Snack','Spring Mix Salad',2.2500,6.00);
-INSERT INTO menu_items VALUES(39,'Main','Standard Mac & Cheese',3.00,8.00);
-INSERT INTO menu_items VALUES(40,'Dessert','Sugar Cone',2.500,6.00);
-INSERT INTO menu_items VALUES(41,'Main','Tandoori Mixed Grill',11.00,18.00);
-INSERT INTO menu_items VALUES(42,'Main','The Classic',4.00,12.00);
-INSERT INTO menu_items VALUES(43,'Main','The King Combo',12.00,20.00);
-INSERT INTO menu_items VALUES(44,'Main','The Kitchen Sink',6.00,14.00);
-INSERT INTO menu_items VALUES(45,'Main','The Original',1.500,5.00);
-INSERT INTO menu_items VALUES(46,'Main','The Ranch',2.400,6.00);
-INSERT INTO menu_items VALUES(47,'Main','The Salad of All Salads',6.00,12.00);
-INSERT INTO menu_items VALUES(48,'Main','Three Meat Plate',10.00,17.00);
-INSERT INTO menu_items VALUES(49,'Main','Three Taco Combo Plate',7.00,11.00);
-INSERT INTO menu_items VALUES(50,'Main','Tonkotsu Ramen',7.00,17.2500);
-INSERT INTO menu_items VALUES(51,'Main','Two Meat Plate',9.00,14.00);
-INSERT INTO menu_items VALUES(52,'Dessert','Two Scoop Bowl',3.00,7.00);
-INSERT INTO menu_items VALUES(53,'Main','Two Taco Combo Plate',6.00,9.00);
-INSERT INTO menu_items VALUES(54,'Main','Veggie Burger',5.00,9.00);
-INSERT INTO menu_items VALUES(55,'Main','Veggie Combo',4.00,9.00);
-INSERT INTO menu_items VALUES(56,'Main','Veggie Taco Bowl',6.00,10.00);
-INSERT INTO menu_items VALUES(57,'Dessert','Waffle Cone',2.500,6.00);
-INSERT INTO menu_items VALUES(58,'Main','Wonton Soup',2.00,6.00);
-INSERT INTO menu_items VALUES(59,'Main','Mini Pizza',null,null);
-INSERT INTO menu_items VALUES(60,'Main','Large Pizza',null,null);
+-- 6. Insérer les données
+INSERT INTO menu_items VALUES
+(1,'Beverage','Bottled Soda',0.500,3.00),
+(2,'Beverage','Bottled Water',0.500,2.00),
+(3,'Main','Breakfast Crepe',5.00,12.00),
+(4,'Main','Buffalo Mac & Cheese',6.00,10.00),
+(5,'Main','Chicago Dog',4.00,9.00),
+(6,'Main','Chicken Burrito',3.2500,12.500),
+(7,'Main','Chicken Pot Pie Crepe',6.00,15.00),
+(8,'Main','Combination Curry',9.00,15.00),
+(9,'Main','Combo Fried Rice',5.00,11.00),
+(10,'Main','Combo Lo Mein',6.00,13.00),
+(11,'Main','Coney Dog',5.00,10.00),
+(12,'Main','Creamy Chicken Ramen',8.00,17.2500),
+(13,'Snack','Crepe Suzette',4.00,9.00),
+(14,'Main','Fish Burrito',3.7500,12.500),
+(15,'Snack','Fried Pickles',1.2500,6.00),
+(16,'Snack','Greek Salad',4.00,11.00),
+(17,'Main','Gyro Plate',8.00,12.00),
+(18,'Main','Hot Ham & Cheese',7.00,11.00),
+(19,'Dessert','Ice Cream Sandwich',1.00,4.00),
+(20,'Beverage','Iced Tea',0.7500,3.00),
+(21,'Main','Italian',6.00,11.00),
+(22,'Main','Lean Beef Tibs',6.00,13.00),
+(23,'Main','Lean Burrito Bowl',3.500,12.500),
+(24,'Main','Lean Chicken Tibs',5.00,11.00),
+(25,'Main','Lean Chicken Tikka Masala',10.00,17.00),
+(26,'Beverage','Lemonade',0.6500,3.500),
+(27,'Main','Lobster Mac & Cheese',10.00,15.00),
+(28,'Dessert','Mango Sticky Rice',1.2500,5.00),
+(29,'Main','Miss Piggie',2.600,6.00),
+(30,'Main','Mothers Favorite',4.500,12.00),
+(31,'Main','New York Dog',4.00,8.00),
+(32,'Main','Pastrami',8.00,11.00),
+(33,'Dessert','Popsicle',0.500,3.00),
+(34,'Main','Pulled Pork Sandwich',7.00,12.00),
+(35,'Main','Rack of Pork Ribs',11.2500,21.00),
+(36,'Snack','Seitan Buffalo Wings',4.00,7.00),
+(37,'Main','Spicy Miso Vegetable Ramen',7.00,17.2500),
+(38,'Snack','Spring Mix Salad',2.2500,6.00),
+(39,'Main','Standard Mac & Cheese',3.00,8.00),
+(40,'Dessert','Sugar Cone',2.500,6.00),
+(41,'Main','Tandoori Mixed Grill',11.00,18.00),
+(42,'Main','The Classic',4.00,12.00),
+(43,'Main','The King Combo',12.00,20.00),
+(44,'Main','The Kitchen Sink',6.00,14.00),
+(45,'Main','The Original',1.500,5.00),
+(46,'Main','The Ranch',2.400,6.00),
+(47,'Main','The Salad of All Salads',6.00,12.00),
+(48,'Main','Three Meat Plate',10.00,17.00),
+(49,'Main','Three Taco Combo Plate',7.00,11.00),
+(50,'Main','Tonkotsu Ramen',7.00,17.2500),
+(51,'Main','Two Meat Plate',9.00,14.00),
+(52,'Dessert','Two Scoop Bowl',3.00,7.00),
+(53,'Main','Two Taco Combo Plate',6.00,9.00),
+(54,'Main','Veggie Burger',5.00,9.00),
+(55,'Main','Veggie Combo',4.00,9.00),
+(56,'Main','Veggie Taco Bowl',6.00,10.00),
+(57,'Dessert','Waffle Cone',2.500,6.00),
+(58,'Main','Wonton Soup',2.00,6.00),
+(59,'Main','Mini Pizza',null,null),
+(60,'Main','Large Pizza',null,null);
+
+-- 7. Vérifier la création
+SELECT 
+    'Database: FOODTRUCK_DB' as info,
+    COUNT(*) as total_rows
+FROM menu_items;
 ```
 
 Utilisez une fonction `AVG` régulière pour trouver le coût moyen des marchandises vendues ("COGS" signifie "Cost Of Goods Sold") pour les articles de menu dans différentes catégories :
 
 ```sql
+-- 8. Votre requête AVG
 SELECT menu_category,
     AVG(menu_cogs_usd) avg_cogs
-  FROM menu_items
-  GROUP BY 1
-  ORDER BY menu_category;
+FROM menu_items
+GROUP BY 1
+ORDER BY menu_category;
 ```
 
 ```
