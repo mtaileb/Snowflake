@@ -96,7 +96,7 @@ INSERT INTO menu_items VALUES(59,'Main','Mini Pizza',null,null);
 INSERT INTO menu_items VALUES(60,'Main','Large Pizza',null,null);
 ```
 
-Utilisez une fonction `AVG` régulière pour trouver le coût moyen des marchandises pour les articles de menu dans différentes catégories :
+Utilisez une fonction `AVG` régulière pour trouver le coût moyen des marchandises vendues ("COGS" signifie "Cost Of Goods Sold") pour les articles de menu dans différentes catégories :
 
 ```sql
 SELECT menu_category,
