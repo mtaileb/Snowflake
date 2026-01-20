@@ -8,6 +8,8 @@ La syntaxe qui définit ce comportement est la clause `OVER` pour la fonction. D
 *   Une clause `ORDER BY`
 *   Une spécification de cadre de fenêtre
 
+![Description de l'image](https://github.com/mtaileb/Snowflake/blob/main/images/Cheat_sheet_SQL_Window_Functions.png?raw=true)
+
 Selon la fonction ou la requête en question, tous ces composants peuvent être facultatifs ; une fonction de fenêtre avec une clause `OVER` vide est valide : `OVER()`. Cependant, dans la plupart des requêtes analytiques, les fonctions de fenêtre nécessitent un ou plusieurs composants explicites de la clause `OVER`. Vous pouvez appeler une fonction de fenêtre dans tout contexte qui prend en charge d'autres fonctions SQL. Les sections suivantes expliquent plus en détail les concepts derrière les fonctions de fenêtre et présentent quelques exemples d'introduction.
 
 ## Fonctions de fenêtre vs fonctions d'agrégation
