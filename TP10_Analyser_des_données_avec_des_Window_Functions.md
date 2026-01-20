@@ -720,26 +720,7 @@ La différence entre ce cadre de fenêtre et le cadre de fenêtre décrit préc�
 
 ### Rassembler le tout
 
-Voici la version finale de la requête, montrant toutes les colonnes :
-
-```sql
-SELECT day, 
-       sales_today, 
-       RANK()
-           OVER (ORDER BY sales_today DESC) AS Rank,
-       SUM(sales_today)
-           OVER (ORDER BY day
-               ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW)
-               AS "SALES SO FAR THIS WEEK",
-       SUM(sales_today)
-           OVER ()
-               AS total_sales,
-       AVG(sales_today)
-           OVER (ORDER BY day ROWS BETWEEN 2 PRECEDING AND CURRENT ROW)
-               AS "3-DAY MOVING AVERAGE"
-    FROM store_sales_2
-    ORDER BY day;
-```
+A vous de jouer! Quelle est la requête qui permet d'avoir ce tableau avec toutes les colonnes?
 
 ```
 +-----+-------------+------+------------------------+-------------+----------------------+
@@ -945,4 +926,26 @@ SELECT branch_ID,
 |         3 |                               22.72727300 |
 |         4 |                               20.45454500 |
 +-----------+-------------------------------------------+
+```
+
+Corrigé:
+Voici la version finale de la requête, montrant toutes les colonnes :
+
+```sql
+SELECT day, 
+       sales_today, 
+       RANK()
+           OVER (ORDER BY sales_today DESC) AS Rank,
+       SUM(sales_today)
+           OVER (ORDER BY day
+               ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW)
+               AS "SALES SO FAR THIS WEEK",
+       SUM(sales_today)
+           OVER ()
+               AS total_sales,
+       AVG(sales_today)
+           OVER (ORDER BY day ROWS BETWEEN 2 PRECEDING AND CURRENT ROW)
+               AS "3-DAY MOVING AVERAGE"
+    FROM store_sales_2
+    ORDER BY day;
 ```
