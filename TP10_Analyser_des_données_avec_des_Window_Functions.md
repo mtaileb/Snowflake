@@ -629,7 +629,7 @@ SELECT day,
 
 Bien qu'il y ait 7 jours dans la période, il n'y a que 5 classements différents (1, 2, 3, 5, 6). Il y a eu deux égalités (pour la 3ème place et la 6ème place), donc il n'y a pas de lignes avec les classements 4 ou 7.
 
-### Calcul des ventes jusqu'à présent cette semaine
+### Calcul des ventes jusqu'à présent
 
 La colonne `Sales So Far This Week` est calculée en utilisant `SUM` comme fonction de fenêtre avec un cadre de fenêtre :
 
