@@ -23,7 +23,8 @@ IOT    | 3000 | 2023-01-01 00:01:00.000 | 21.1673  | 2023-01-01 00:01:32.000
 ```
 
 Une série temporelle peut révéler des pics lorsque les lectures changent brutalement pour une raison quelconque. Par exemple, l'image suivante montre une séquence de relevés de température pris à des intervalles de 15 secondes, avec des valeurs culminant au-dessus de 40°C après être restées régulièrement dans la plage des 35°C le jour précédent.
-![Graphique linéaire montrant des relevés de température de capteurs augmentant considérablement pendant un certain temps.](https://docs.snowflake.com/en/_images/sensor-temp-readings.png)
+
+![Graphique linéaire montrant des relevés de température de capteurs augmentant considérablement pendant un certain temps.](https://github.com/mtaileb/Snowflake/blob/main/images/time-series-data-spike.png?raw=true)
 
 Les sections suivantes montrent comment analyser et visualiser de grands volumes de ce type de données avec des fonctions et des jointures SQL qui fournissent des résultats rapides et précis.
 
@@ -42,7 +43,9 @@ Un certain nombre de fonctions SQL couramment utilisées sont disponibles pour a
 > **Note**
 > Pour les données `TIMESTAMP_TZ`, Snowflake stocke le décalage d'un fuseau horaire donné, et non le fuseau horaire réel, au moment de la création d'une valeur donnée.
 
-Pour optimiser les performances des requêtes, les tables utilisées pour l'analyse des séries temporelles sont souvent partitionnées par le temps (et parfois aussi par l'ID du capteur ou une dimension similaire). Voir [Clustering Keys & Clustered Tables](https://docs.snowflake.com/en/user-guide/tables-clustering-keys.html).
+Pour optimiser les performances des requêtes, les tables utilisées pour l'analyse des séries temporelles sont souvent partitionnées par le temps (et parfois aussi par l'ID du capteur ou une dimension similaire). 
+
+![Clustering Keys & Clustered Tables](https://github.com/mtaileb/Snowflake/blob/main/images/tables-clustered2.png?raw=true)
 
 ## Agrégation des données de séries temporelles
 
@@ -62,7 +65,128 @@ De même, la fonction `DATE_TRUNC` tronque une partie d'une série de valeurs de
 
 L'exemple suivant ré-échantillonne vers le bas une table nommée `sensor_data_ts`, qui contient des lectures de deux capteurs d'usine et contient 5,3 millions de lignes. Ces lectures étaient ingérées par seconde, donc 5,3 millions de lignes représentent seulement un mois de données, avec un peu plus de 2,5 millions de lignes par capteur. Vous pouvez utiliser la fonction `TIME_SLICE` pour agréger jusqu'à une seule ligne par minute, par heure ou par jour, par exemple.
 
-Pour exécuter cet exemple, créez et chargez d'abord la table `sensor_data_ts` ; voir [Création de la table sensor_data_ts](#création-de-la-table-sensor_data_ts). Voici un petit échantillon des données de la table :
+Pour exécuter cet exemple, créez et chargez d'abord la table `sensor_data_ts`.
+
+## Création de la table `sensor_data_ts`
+
+Si vous souhaitez tester les exemples de cette section qui interrogent la table `sensor_data_ts`, vous pouvez créer et charger une copie de cette table en exécutant le script SQL suivant. Le script génère un mois de données synthétiques de lectures de capteurs en appelant les fonctions `UNIFORM`, `RANDOM`, et `GENERATOR` ; par conséquent, votre copie de la table ne renverra pas des résultats identiques. Les lectures seront dans la même plage mais ne seront pas les mêmes.
+
+```sql
+CREATE OR REPLACE TABLE sensor_data_device1 (
+   device_id VARCHAR(10),
+   timestamp TIMESTAMP,
+   temperature DECIMAL(6,4),
+   vibration DECIMAL(6,4),
+   motor_rpm INT
+);
+
+INSERT INTO sensor_data_device1 (device_id, timestamp, temperature, vibration, motor_rpm)
+   SELECT 'DEVICE1', timestamp,
+     UNIFORM(25.1111, 40.2222, RANDOM()), -- Plage de température en °C
+     UNIFORM(0.2985, 0.3412, RANDOM()), -- Plage de vibration en mm/s
+     UNIFORM(1400, 1495, RANDOM()) -- Plage de RPM moteur
+   FROM (
+     SELECT DATEADD(SECOND, SEQ4(), '2024-03-01') AS timestamp
+       FROM TABLE(GENERATOR(ROWCOUNT => 2678400)) -- secondes dans 31 jours
+);
+
+CREATE OR REPLACE TABLE sensor_data_device2 (
+   device_id VARCHAR(10),
+   timestamp TIMESTAMP,
+   temperature DECIMAL(6,4),
+   vibration DECIMAL(6,4),
+   motor_rpm INT
+);
+
+INSERT INTO sensor_data_device2 (device_id, timestamp, temperature, vibration, motor_rpm)
+   SELECT 'DEVICE2', timestamp,
+     UNIFORM(24.6642, 36.3107, RANDOM()), -- Plage de température en °C
+     UNIFORM(0.2876, 0.3333, RANDOM()), -- Plage de vibration en mm/s
+     UNIFORM(1425, 1505, RANDOM()) -- Plage de RPM moteur
+   FROM (
+     SELECT DATEADD(SECOND, SEQ4(), '2024-03-01') AS timestamp
+       FROM TABLE(GENERATOR(ROWCOUNT => 2678400)) -- secondes dans 31 jours
+);
+
+INSERT INTO sensor_data_device1 SELECT * FROM sensor_data_device2;
+
+DROP TABLE IF EXISTS sensor_data_ts;
+
+ALTER TABLE sensor_data_device1 RENAME TO sensor_data_ts;
+
+DROP TABLE sensor_data_device2;
+
+SELECT COUNT(*) FROM sensor_data_ts; -- vérifier le nombre de lignes = 5356800
+```
+
+## Création de la table `heavy_weather`
+
+Le script suivant crée et charge la table `heavy_weather`, qui est utilisée dans les exemples pour les fonctions `MAX_BY`. La table contient 55 lignes d'enregistrements de précipitations de neige pour des villes californiennes pendant la dernière semaine de 2021.
+
+```sql
+CREATE OR REPLACE TABLE heavy_weather
+   (start_time TIMESTAMP, precip NUMBER(3,2), city VARCHAR(20), county VARCHAR(20));
+
+INSERT INTO heavy_weather VALUES
+  ('2021-12-23 06:56:00.000',0.08,'Mount Shasta','Siskiyou'),
+  ('2021-12-23 07:51:00.000',0.09,'Mount Shasta','Siskiyou'),
+  ('2021-12-23 16:23:00.000',0.56,'South Lake Tahoe','El Dorado'),
+  ('2021-12-23 17:24:00.000',0.38,'South Lake Tahoe','El Dorado'),
+  ('2021-12-23 18:30:00.000',0.28,'South Lake Tahoe','El Dorado'),
+  ('2021-12-23 19:35:00.000',0.37,'Mammoth Lakes','Mono'),
+  ('2021-12-23 19:36:00.000',0.80,'South Lake Tahoe','El Dorado'),
+  ('2021-12-24 04:43:00.000',0.25,'Alta','Placer'),
+  ('2021-12-24 05:26:00.000',0.34,'Alta','Placer'),
+  ('2021-12-24 05:35:00.000',0.42,'Big Bear City','San Bernardino'),
+  ('2021-12-24 06:49:00.000',0.17,'South Lake Tahoe','El Dorado'),
+  ('2021-12-24 07:40:00.000',0.07,'Alta','Placer'),
+  ('2021-12-24 08:36:00.000',0.07,'Alta','Placer'),
+  ('2021-12-24 11:52:00.000',0.08,'Alta','Placer'),
+  ('2021-12-24 12:52:00.000',0.38,'Alta','Placer'),
+  ('2021-12-24 15:44:00.000',0.13,'Alta','Placer'),
+  ('2021-12-24 15:53:00.000',0.07,'South Lake Tahoe','El Dorado'),
+  ('2021-12-24 16:55:00.000',0.09,'Big Bear City','San Bernardino'),
+  ('2021-12-24 21:53:00.000',0.07,'Montague','Siskiyou'),
+  ('2021-12-25 02:52:00.000',0.07,'Alta','Placer'),
+  ('2021-12-25 07:52:00.000',0.07,'Alta','Placer'),
+  ('2021-12-25 08:52:00.000',0.08,'Alta','Placer'),
+  ('2021-12-25 09:48:00.000',0.18,'Alta','Placer'),
+  ('2021-12-25 12:52:00.000',0.10,'Alta','Placer'),
+  ('2021-12-25 17:21:00.000',0.23,'Alturas','Modoc'),
+  ('2021-12-25 17:52:00.000',1.54,'Alta','Placer'),
+  ('2021-12-26 01:52:00.000',0.61,'Alta','Placer'),
+  ('2021-12-26 05:43:00.000',0.16,'South Lake Tahoe','El Dorado'),
+  ('2021-12-26 05:56:00.000',0.08,'Bishop','Inyo'),
+  ('2021-12-26 06:52:00.000',0.75,'Bishop','Inyo'),
+  ('2021-12-26 06:53:00.000',0.08,'Lebec','Los Angeles'),
+  ('2021-12-26 07:52:00.000',0.65,'Alta','Placer'),
+  ('2021-12-26 09:52:00.000',2.78,'Alta','Placer'),
+  ('2021-12-26 09:55:00.000',0.07,'Big Bear City','San Bernardino'),
+  ('2021-12-26 14:22:00.000',0.32,'Alta','Placer'),
+  ('2021-12-26 14:52:00.000',0.34,'Alta','Placer'),
+  ('2021-12-26 15:43:00.000',0.35,'Alta','Placer'),
+  ('2021-12-26 17:31:00.000',5.24,'Alta','Placer'),
+  ('2021-12-26 22:52:00.000',0.07,'Alta','Placer'),
+  ('2021-12-26 23:15:00.000',0.52,'Alta','Placer'),
+  ('2021-12-27 02:52:00.000',0.08,'Alta','Placer'),
+  ('2021-12-27 03:52:00.000',0.14,'Alta','Placer'),
+  ('2021-12-27 04:52:00.000',1.52,'Alta','Placer'),
+  ('2021-12-27 14:37:00.000',0.89,'Alta','Placer'),
+  ('2021-12-27 14:53:00.000',0.07,'South Lake Tahoe','El Dorado'),
+  ('2021-12-27 17:53:00.000',0.07,'South Lake Tahoe','El Dorado'),
+  ('2021-12-30 11:23:00.000',0.12,'Lebec','Los Angeles'),
+  ('2021-12-30 11:43:00.000',0.98,'Lebec','Los Angeles'),
+  ('2021-12-30 13:53:00.000',0.23,'Lebec','Los Angeles'),
+  ('2021-12-30 14:53:00.000',0.13,'Lebec','Los Angeles'),
+  ('2021-12-30 15:15:00.000',0.29,'Lebec','Los Angeles'),
+  ('2021-12-30 17:53:00.000',0.10,'Lebec','Los Angeles'),
+  ('2021-12-30 18:53:00.000',0.09,'Lebec','Los Angeles'),
+  ('2021-12-30 19:53:00.000',0.07,'Lebec','Los Angeles'),
+  ('2021-12-30 20:53:00.000',0.07,'Lebec','Los Angeles')
+  ;
+```
+
+Aperçu de la table:
 
 ```
 +-----------+-------------------------+-------------+-----------+-----------+
@@ -122,11 +246,43 @@ SELECT
 +-------------------------+-----------+----------+---------------+
 ```
 
+Explication de la ligne de code om est utilisée `TIME_SLICE`:
+
+1. timestamp (colonne d'entrée)
+
+    C'est la colonne source contenant les horodatages bruts
+
+    Dans l'exemple, ce sont des lectures de capteurs prises chaque seconde
+
+2. TO_TIMESTAMP_NTZ(timestamp) (conversion de type)
+
+    TO_TIMESTAMP_NTZ() = Convertit en TIMESTAMP No Time Zone (sans fuseau horaire)
+
+    Assure que le format est correct pour TIME_SLICE()
+
+    NTZ = "No Time Zone" - utile quand les données n'ont pas de fuseau horaire spécifique
+
+3. TIME_SLICE(..., 1, 'MINUTE') (la fonction principale)
+
+    TIME_SLICE() : Fonction qui divise le temps en intervalles fixes
+
+    1 : Largeur de l'intervalle = 1 unité
+
+    'MINUTE' : Unité de l'intervalle = minutes
+
+    Traduction : "Regroupe les données par intervalles de 1 minute"
+
+4. minute_slice (alias de colonne)
+
+    Nom donné au résultat dans le SELECT
+
+    Contiendra l'heure de début de chaque intervalle d'une minute
+
 En utilisant la fonction `TIME_SLICE`, vous pouvez créer des tables agrégées plus petites pour l'analyse, et vous pouvez appliquer le processus de ré-échantillonnage à différents niveaux (heure, jour, semaine, etc.).
 
 #### Ré-échantillonnage avec `DATE_TRUNC`
 
-L'exemple suivant sélectionne des données d'une table nommée `order_header` dans le schéma `raw.pos` de l'exemple de base de données Tasty Bytes. Cette table contient 248M de lignes.
+L'exemple suivant sélectionne des données d'une table nommée `order_header` dans le schéma `raw.pos` de l'exemple de base de données Tasty Bytes. Cette table contient 248M de lignes (pour charger cette base de données voir ici: https://docs.snowflake.com/en/user-guide/tutorials/tasty-bytes-sql-load#step-4-use-a-database-schema-and-table).
 
 La table `order_header` a une colonne `TIMESTAMP` nommée `order_ts`. La requête crée une série temporelle agrégée en utilisant cette colonne comme second argument de la fonction `DATE_TRUNC`. Le premier argument spécifie un intervalle de jour. Cela signifie que les enregistrements individuels, qui ont une granularité heures/minutes/secondes, sont regroupés par jour.
 
@@ -139,7 +295,7 @@ SELECT DATE_TRUNC('day', order_ts)::date sliced_ts, truck_id, location_id, AVG(o
   FROM order_header
   WHERE EXTRACT(YEAR FROM order_ts)='2022'
   GROUP BY date_trunc('day', order_ts), truck_id, location_id
-  ORDER BY 1, 2, 3 LIMIT 25;
+  ORDER BY 1, 2, 3 LIMIT 25; -- Trie par : 1=date, 2=camion, 3=lieu
 ```
 
 ```
