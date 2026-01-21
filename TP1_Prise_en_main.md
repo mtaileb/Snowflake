@@ -47,7 +47,7 @@ Pour ce tutoriel, vous téléchargez des **fichiers de données d'exemple d'empl
 
 **Pour télécharger et dézipper les fichiers de données d'exemple :**
 
-1.  **Téléchargez l'ensemble de fichiers de données d'exemple.** Faites un clic droit sur **https://docs.snowflake.com/en/_downloads/34f4a66f56d00340f8f7a92acaccd977/getting-started.zip** et enregistrez le lien/le fichier sur votre **système de fichiers local**.
+1.  **Téléchargez l'ensemble de fichiers de données d'exemple.** Faites un clic droit sur **https://github.com/mtaileb/Snowflake/raw/refs/heads/main/data/getting-started.zip** et enregistrez le lien/le fichier sur votre **système de fichiers local**.
 2.  **Dézippez les fichiers d'exemple.** Le tutoriel suppose que vous avez extrait les fichiers dans l'un des répertoires suivants :
     *   **Linux/macOS :** `/tmp`
     *   **Windows :** `C:\temp`
