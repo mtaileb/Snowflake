@@ -14,6 +14,13 @@ L'exemple illustre ensuite comment restaurer les deux versions supprimées de la
 4.  Enfin, la **première version** de la table supprimée est restaurée.
 
 ```sql
+CREATE OR REPLACE DATABASE exemple_time_travel;
+
+SELECT CURRENT_DATABASE(), CURRENT_SCHEMA();
+
+-- Creation de la table
+CREATE TABLE loaddata1 (c1 boolean);
+
 -- 1. Afficher les tables actuelles
 SHOW TABLES HISTORY;
 
@@ -59,4 +66,3 @@ SHOW TABLES HISTORY;
 *   `LOADDATA1` : Première version originale restaurée (48 lignes)
 *   `LOADDATA2` : Deuxième version restaurée (4 lignes de nombres)
 *   `LOADDATA3` : Version courante (0 ligne, colonne varchar)
-*   `PRODDATA1` : Table indépendante non modifiée
